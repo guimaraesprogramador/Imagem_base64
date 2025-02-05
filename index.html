@@ -34,9 +34,9 @@
             background-color: white;
         }
         div{
-            font-size: 3em;
+            font-size: 2em;
             margin-top: 50%;
-            margin-left: 0%;
+            margin-left: 5%;
         }
     }
     </style>
@@ -80,7 +80,13 @@
                     var button = document.createElement("button");
                     button.textContent = "copiar texto"
                     button.id = 'copia'
-                    button.onclick = copia();
+                    button.onclick = function(){
+                        var textoarea = document.querySelector("textarea");
+                        if (textoarea != undefined) {
+                            textoarea.select();
+                            document.execCommand('copy')
+                        }
+                    }
                     document.querySelector('div').appendChild(button);
 
                 }
@@ -108,7 +114,14 @@
                                 var button = document.createElement("button");
                                 button.textContent = "copiar texto"
                                 button.id = 'copia'
-                                button.onclick = copia();
+                                button.onclick = function(){
+                                    var textoarea = document.querySelector("textarea");
+                                    if (textoarea != undefined) {
+                                        textoarea.select();
+                                        document.execCommand('copy')
+                                        console.log("copia")
+                                    }
+                                }
                                 document.querySelector('div').appendChild(button);
 
                             }
@@ -124,13 +137,6 @@
                     req.send();
                 }
                 else alert("tem ser https ou http para funcionar e não pode está em branco")
-            }
-        }
-        function copia() {
-            var textoarea = document.querySelector("textarea");
-            if (textoarea != undefined) {
-                textoarea.select();
-                document.execCommand('copy')
             }
         }
     </script>
