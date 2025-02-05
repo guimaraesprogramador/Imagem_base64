@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="utf8" />
+    <title>Gerar imagem Base64</title>
+    <style>
+        textarea {
+            width: 480px;
+            min-height: 240px;
+            overflow: hidden;
+            resize: vertical;
+        }
+        body{
+            background-color: white;
+        }
+        div{
+            margin-top: 15%;
+            margin-left: 30%;
+        }
+    </style>
+</head>
+
+<body>
+    <div>
+    <label> Pegar imagem:</label>
+    <input type="file" id="imagem" accept="Image/*" onchange="converterimage()" />
+    <br>
+    <label> link do site:</label>
+    <input type="text" id="texto">
+    <button onclick="converterimage()">enviar</button>
+    <br>
+    <progress value="0" max="100"></progress>
+    <br>
+</div>
+    <script>
+        function converterimage() {
+            var receber = document.getElementById("imagem").files;
+            var textoarea = document.querySelector("textarea");
+            if (textoarea != undefined) {
+                document.querySelector('div').removeChild(textoarea)
+                document.querySelector('div').removeChild(document.querySelectorAll("br")[2])
+                document.querySelector('div').removeChild(document.querySelector('#copia'))
+                document.querySelector('progress').value = 0;
+            }
+            if (receber.length > 0) {
+                document.querySelector("#texto").value = "";
+                var nome = document.getElementById("imagem").value;
+                var carregarimagem = receber[0];
+                var lerarquivo = new FileReader();
+                lerarquivo.readAsDataURL(carregarimagem);
+                document.getElementById("imagem").value = "";
+                lerarquivo.onload = function (arquivocaregado) {
+                    var Base64 = arquivocaregado.target.result;
+                    var a = document.createElement("textarea");
+                    a.value = '<img src=' + '"' + Base64 + '" />';
+                    document.querySelector('div').appendChild(a);
+                    document.querySelector('div').appendChild(document.createElement("br"));
+                    var button = document.createElement("button");
+                    button.textContent = "copiar texto"
+                    button.id = 'copia'
+                    button.onclick = copia();
+                    document.querySelector('div').appendChild(button);
+
+                }
+                lerarquivo.onprogress = function (data) {
+                    var progress = Math.round(data.loaded / data.total) * 100;
+                    document.querySelector('progress').value = progress;
+                }
+            }
+            else {
+                document.getElementById("imagem").value = "";
+                var url = document.querySelector("#texto").value;
+                if (url.indexOf("https") != -1 || url.indexOf("http") != -1) {
+                    var req = new XMLHttpRequest()
+                    req.responseType = "blob";
+                    req.onload = (e) => {
+                        if (req.status === 200 && req.readyState === req.DONE) {
+                            var arraybuffer = req.response;
+                            var lerarquivo = new FileReader();
+                            lerarquivo.onload = function (arquivocaregado) {
+                                var Base64 = arquivocaregado.target.result;
+                                var a = document.createElement("textarea");
+                                a.value = '<img src=' + '"' + Base64 + '" />';
+                                document.querySelector('div').appendChild(a);
+                                document.querySelector('div').appendChild(document.createElement("br"));
+                                var button = document.createElement("button");
+                                button.textContent = "copiar texto"
+                                button.id = 'copia'
+                                button.onclick = copia();
+                                document.querySelector('div').appendChild(button);
+
+                            }
+                            lerarquivo.onprogress = function (data) {
+                                var progress = Math.round(data.loaded / data.total) * 100;
+                                document.querySelector('progress').value = progress;
+                            }
+                            lerarquivo.readAsDataURL(arraybuffer);
+                        }
+
+                    }
+                    req.open("GET", url);
+                    req.send();
+                }
+                else alert("tem ser https ou http para funcionar e não pode está em branco")
+            }
+        }
+        function copia() {
+            var textoarea = document.querySelector("textarea");
+            if (textoarea != undefined) {
+                textoarea.select();
+                document.execCommand('copy')
+            }
+        }
+    </script>
+</body>
+
+</html>
