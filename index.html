@@ -5,56 +5,61 @@
     <meta charset="utf8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Gerar imagem Base64</title>
     <script src="https://cdn.jsdelivr.net/g/filesaver.js"></script>
+    <title>Gerar imagem Base64</title>
     <style>
-        @media (min-width:1024px)  {
-            
-        textarea {
-            width: 480px;
-            min-height: 240px;
-            overflow: hidden;
-            resize: vertical;
+        @media (min-width:1024px) {
+
+            textarea {
+                width: 480px;
+                min-height: 240px;
+                overflow: hidden;
+                resize: vertical;
+            }
+
+            body {
+                background-color: white;
+            }
+
+            div {
+                margin-top: 15%;
+                margin-left: 30%;
+            }
         }
-        body{
-            background-color: white;
+
+        @media (max-width:1024px) {
+            textarea {
+                width: 480px;
+                min-height: 240px;
+                overflow: hidden;
+                resize: vertical;
+            }
+
+            body {
+                background-color: white;
+            }
+
+            div {
+                font-size: 2em;
+                margin-top: 50%;
+                margin-left: 5%;
+            }
         }
-        div{
-            margin-top: 15%;
-            margin-left: 30%;
-        }
-    }
-    @media (max-width:1024px){
-        textarea {
-            width: 480px;
-            min-height: 240px;
-            overflow: hidden;
-            resize: vertical;
-        }
-        body{
-            background-color: white;
-        }
-        div{
-            font-size: 2em;
-            margin-top: 50%;
-            margin-left: 5%;
-        }
-    }
     </style>
 </head>
 
 <body>
     <div>
-    <label> Pegar imagem:</label>
-    <input type="file" id="imagem" accept="Image/*" onchange="converterimage()" />
-    <br>
-    <label> link do site:</label>
-    <input type="text" id="texto">
-    <button onclick="converterimage()">enviar</button>
-    <br>
-    <progress value="0" max="100"></progress>
-    <br>
-</div>
+        <label> Pegar imagem:</label>
+        <input type="file" id="imagem" accept="Image/*" onchange="converterimage()" />
+        <br>
+        <label> link do site:</label>
+        <input type="text" id="texto">
+        <button onclick="converterimage()">enviar</button>
+        <br>
+        <progress value="0" max="100"></progress>
+        <br>
+    </div>
     <script>
         function converterimage() {
             var receber = document.getElementById("imagem").files;
@@ -81,7 +86,7 @@
                     var button = document.createElement("button");
                     button.textContent = "copiar texto"
                     button.id = 'copia'
-                    button.onclick = function(){
+                    button.onclick = function () {
                         var textoarea = document.querySelector("textarea");
                         if (textoarea != undefined) {
                             textoarea.select();
@@ -89,7 +94,19 @@
                         }
                     }
                     document.querySelector('div').appendChild(button);
+                    var button = document.createElement("button");
+                    button.textContent = "salvado texto"
+                    button.id = 'copia2'
+                    button.onclick = function () {
+                        var textoarea = document.querySelector("textarea");
+                        if (textoarea != undefined) {
+                            var content = '<img src=' + '"' + Base64 + '" />';
+                            var blob = new Blob([content], { type: "text/plain;charset=utf-8" });
+                            saveAs(blob, 'filename.txt');
 
+                        }
+                    }
+                    document.querySelector('div').appendChild(button);
                 }
                 lerarquivo.onprogress = function (data) {
                     var progress = Math.round(data.loaded / data.total) * 100;
@@ -115,15 +132,28 @@
                                 var button = document.createElement("button");
                                 button.textContent = "copiar texto"
                                 button.id = 'copia'
-                                button.onclick = function(){
+                                button.onclick = function () {
                                     var textoarea = document.querySelector("textarea");
                                     if (textoarea != undefined) {
                                         textoarea.select();
-                                        document.execCommand('copy')
+                                        document.execCommand('copy');
+
                                     }
                                 }
                                 document.querySelector('div').appendChild(button);
+                                var button = document.createElement("button");
+                                button.textContent = "salvado texto"
+                                button.id = 'copia2'
+                                button.onclick = function () {
+                                    var textoarea = document.querySelector("textarea");
+                                    if (textoarea != undefined) {
+                                        var content = '<img src=' + '"' + Base64 + '" />';
+                                        var blob = new Blob([content], { type: "text/plain;charset=utf-8" });
+                                        saveAs(blob, 'filename.txt');
 
+                                    }
+                                }
+                                document.querySelector('div').appendChild(button);
                             }
                             lerarquivo.onprogress = function (data) {
                                 var progress = Math.round(data.loaded / data.total) * 100;
